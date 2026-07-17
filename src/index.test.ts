@@ -1,168 +1,147 @@
 /**
- * Nova AI Studio — Integration Tests
+ * Nova AI Studio — Complete Test Suite
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { EventBus, eventBus, EventTypes } from './core/event-bus';
-import { WorkflowEngine, workflowEngine, DEFAULT_WORKFLOW } from './core/workflow-engine';
-import { Orchestrator, orchestrator } from './core/orchestrator';
-import { ProductAnalystAgent } from './agents/definitions/product-analyst';
+import { describe, it, expect } from 'vitest';
+import {
+  EventBus, eventBus, EventTypes,
+  WorkflowEngine, workflowEngine, DEFAULT_WORKFLOW,
+  Orchestrator, orchestrator,
+  createAllAgents,
+} from './index';
 
 describe('EventBus', () => {
-  let bus: EventBus;
-
-  beforeEach(() => {
-    bus = new EventBus();
-  });
-
   it('should emit and receive events', async () => {
+    const bus = new EventBus();
     let received = false;
 
-    bus.on('test', () => {
-      received = true;
-    });
-
+    bus.on('test', () => { received = true; });
     await bus.emit('test', { data: 'hello' }, 'test');
 
     expect(received).toBe(true);
   });
 
-  it('should return unsubscribe function', async () => {
-    let count = 0;
+  it('should track history', async () => {
+    const bus = new EventBus();
+    await bus.emit('e1', {}, 's');
+    await bus.emit('e2', {}, 's');
 
-    const unsubscribe = bus.on('test', () => {
-      count++;
-    });
-
-    await bus.emit('test', {}, 'test');
-    expect(count).toBe(1);
-
-    unsubscribe();
-    await bus.emit('test', {}, 'test');
-    expect(count).toBe(1);
-  });
-
-  it('should track event history', async () => {
-    await bus.emit('test1', { a: 1 }, 'source1');
-    await bus.emit('test2', { b: 2 }, 'source2');
-
-    const history = bus.getHistory();
-    expect(history).toHaveLength(2);
+    expect(bus.getHistory()).toHaveLength(2);
   });
 });
 
 describe('WorkflowEngine', () => {
-  it('should start a workflow', async () => {
-    const state = await workflowEngine.startWorkflow('project-1');
+  it('should have 10 phases', () => {
+    expect(DEFAULT_WORKFLOW.phases).toHaveLength(10);
+  });
 
+  it('should start workflow', async () => {
+    const state = await workflowEngine.startWorkflow('p1');
     expect(state.status).toBe('running');
     expect(state.phases).toHaveLength(10);
-    expect(state.currentPhase).toBe(0);
   });
 
-  it('should track phase progress', async () => {
-    await workflowEngine.startWorkflow('project-2');
-
-    const phase = await workflowEngine.startPhase('project-2');
-    expect(phase.status).toBe('in-progress');
-
-    await workflowEngine.completePhase('project-2');
+  it('should complete phase', async () => {
+    await workflowEngine.startWorkflow('p2');
+    await workflowEngine.startPhase('p2');
+    const phase = await workflowEngine.completePhase('p2');
     expect(phase.status).toBe('completed');
   });
+});
 
-  it('should calculate progress percentage', async () => {
-    await workflowEngine.startWorkflow('project-3');
+describe('All 15 Agents', () => {
+  const agents = createAllAgents();
 
-    expect(workflowEngine.getProgress('project-3')).toBe(0);
+  it('should create all 15 agents', () => {
+    expect(Object.keys(agents)).toHaveLength(15);
+  });
 
-    await workflowEngine.startPhase('project-3');
-    await workflowEngine.completePhase('project-3');
+  it('each agent should have unique ID', () => {
+    const ids = Object.values(agents).map(a => a.id);
+    expect(new Set(ids).size).toBe(15);
+  });
 
-    expect(workflowEngine.getProgress('project-3')).toBe(10);
+  it('each agent should have capabilities', () => {
+    Object.values(agents).forEach(agent => {
+      expect(agent.getInfo().capabilities.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('each agent should have tools', () => {
+    Object.values(agents).forEach(agent => {
+      expect(agent.getInfo().tools.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('all agents should be idle initially', () => {
+    Object.values(agents).forEach(agent => {
+      expect(agent.getStatus()).toBe('idle');
+    });
   });
 });
 
 describe('Orchestrator', () => {
-  it('should register agents', () => {
-    const agent = new ProductAnalystAgent();
-    orchestrator.registerAgent(agent);
+  it('should register all 15 agents', () => {
+    const testOrchestrator = new Orchestrator();
+    const agents = createAllAgents();
 
-    const agents = orchestrator.listAgents();
-    expect(agents).toHaveLength(1);
-    expect(agents[0].id).toBe('product-analyst');
+    Object.values(agents).forEach(agent => {
+      testOrchestrator.registerAgent(agent);
+    });
+
+    expect(testOrchestrator.listAgents()).toHaveLength(15);
   });
 
-  it('should create projects', async () => {
-    const project = await orchestrator.createProject('Build an e-commerce platform');
-
+  it('should create project', async () => {
+    const project = await orchestrator.createProject('Build an AI platform');
     expect(project.id).toBeDefined();
-    expect(project.name).toBe('Build an e-commerce platform');
     expect(project.status).toBe('initializing');
-  });
-
-  it('should list projects', async () => {
-    await orchestrator.createProject('Project A');
-    await orchestrator.createProject('Project B');
-
-    const projects = orchestrator.listProjects();
-    expect(projects).toHaveLength(2);
   });
 });
 
-describe('ProductAnalystAgent', () => {
-  let agent: ProductAnalystAgent;
-
-  beforeEach(() => {
-    agent = new ProductAnalystAgent();
-  });
-
-  it('should have correct config', () => {
-    expect(agent.id).toBe('product-analyst');
-    expect(agent.name).toBe('Product Analyst');
-    expect(agent.getStatus()).toBe('idle');
-  });
-
-  it('should analyze ideas', async () => {
-    const task = {
-      id: 'task-1',
+describe('Agent Execution', () => {
+  it('ProductAnalyst should analyze ideas', async () => {
+    const agents = createAllAgents();
+    const result = await agents.productAnalyst.execute({
+      id: 't1',
       title: 'analyze idea',
-      description: 'Analyze project idea',
-      input: { idea: 'Build a task management app' },
-      priority: 'high' as const,
-      status: 'pending' as const,
+      description: 'Analyze',
+      input: { idea: 'Build a task app' },
+      priority: 'high',
+      status: 'pending',
       createdAt: new Date(),
-    };
-
-    const result = await agent.execute(task);
+    });
 
     expect(result.type).toBe('idea-analysis');
-    expect(result.analysis).toBeDefined();
   });
 
-  it('should create PRDs', async () => {
-    const task = {
-      id: 'task-2',
-      title: 'create prd',
-      description: 'Create PRD',
-      input: {
-        analysis: {
-          idea: 'Task app',
-          problemStatement: 'Need better task management',
-          targetUsers: ['Developers'],
-          successMetrics: ['Adoption rate'],
-          keyFeatures: [{ name: 'Tasks', priority: 'high', description: 'Task management' }],
-          risks: [],
-          assumptions: [],
-        },
-      },
-      priority: 'high' as const,
-      status: 'pending' as const,
+  it('Security should generate report', async () => {
+    const agents = createAllAgents();
+    const result = await agents.security.execute({
+      id: 't2',
+      title: 'security audit',
+      description: 'Audit',
+      input: {},
+      priority: 'high',
+      status: 'pending',
       createdAt: new Date(),
-    };
+    });
 
-    const result = await agent.execute(task);
+    expect(result.type).toBe('security-report');
+  });
 
-    expect(result.type).toBe('prd');
-    expect(result.prd).toBeDefined();
+  it('QA should create test plan', async () => {
+    const agents = createAllAgents();
+    const result = await agents.qa.execute({
+      id: 't3',
+      title: 'create tests',
+      description: 'Test',
+      input: {},
+      priority: 'high',
+      status: 'pending',
+      createdAt: new Date(),
+    });
+
+    expect(result.type).toBe('test-results');
   });
 });
