@@ -1,0 +1,11 @@
+{
+  "id": "frontend",
+  "name": "Frontend Agent",
+  "version": "1.0.0",
+  "description": "Frontend specialist agent",
+  "capabilities": ["frontend"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

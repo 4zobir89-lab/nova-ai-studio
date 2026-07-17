@@ -1,0 +1,11 @@
+{
+  "id": "security",
+  "name": "Security Agent",
+  "version": "1.0.0",
+  "description": "Security specialist agent",
+  "capabilities": ["security"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

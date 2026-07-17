@@ -1,0 +1,11 @@
+{
+  "id": "creative-director",
+  "name": "Creative Director Agent",
+  "version": "1.0.0",
+  "description": "Creative Director specialist agent",
+  "capabilities": ["creative_director"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

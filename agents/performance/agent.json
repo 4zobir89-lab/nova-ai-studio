@@ -1,0 +1,11 @@
+{
+  "id": "performance",
+  "name": "Performance Agent",
+  "version": "1.0.0",
+  "description": "Performance specialist agent",
+  "capabilities": ["performance"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

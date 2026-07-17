@@ -1,0 +1,11 @@
+{
+  "id": "ui",
+  "name": "Ui Agent",
+  "version": "1.0.0",
+  "description": "Ui specialist agent",
+  "capabilities": ["ui"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

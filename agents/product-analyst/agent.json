@@ -1,0 +1,33 @@
+{
+  "id": "product-analyst",
+  "name": "Product Analyst Agent",
+  "version": "1.0.0",
+  "description": "Analyzes project ideas, understands target users, and creates Product Requirements Documents",
+  "capabilities": [
+    "idea-analysis",
+    "user-research",
+    "prd-creation",
+    "goal-definition",
+    "stakeholder-interview"
+  ],
+  "inputs": [
+    "project-idea",
+    "user-context",
+    "business-goals"
+  ],
+  "outputs": [
+    "requirements.md",
+    "product-spec.md",
+    "user-personas.md"
+  ],
+  "dependencies": [],
+  "tools": [
+    "web-search",
+    "document-generator",
+    "template-engine"
+  ],
+  "memory": {
+    "type": "project",
+    "scope": "per-project"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "documentation",
+  "name": "Documentation Agent",
+  "version": "1.0.0",
+  "description": "Documentation specialist agent",
+  "capabilities": ["documentation"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "backend",
+  "name": "Backend Agent",
+  "version": "1.0.0",
+  "description": "Backend specialist agent",
+  "capabilities": ["backend"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

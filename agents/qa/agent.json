@@ -1,0 +1,11 @@
+{
+  "id": "qa",
+  "name": "Qa Agent",
+  "version": "1.0.0",
+  "description": "Qa specialist agent",
+  "capabilities": ["qa"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

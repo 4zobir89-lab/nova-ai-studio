@@ -1,0 +1,11 @@
+{
+  "id": "database",
+  "name": "Database Agent",
+  "version": "1.0.0",
+  "description": "Database specialist agent",
+  "capabilities": ["database"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

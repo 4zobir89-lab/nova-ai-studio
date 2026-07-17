@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Event",
+  "description": "Event in the Nova AI Studio event system",
+  "type": "object",
+  "required": ["id", "type", "timestamp", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "PROJECT_CREATED",
+        "REQUIREMENTS_READY",
+        "PLANNING_COMPLETE",
+        "ARCHITECTURE_READY",
+        "DESIGN_READY",
+        "CODE_READY",
+        "INTEGRATION_COMPLETE",
+        "SECURITY_REVIEW_PASSED",
+        "TEST_PASSED",
+        "TEST_FAILED",
+        "FIX_REQUIRED",
+        "DEPLOY_READY",
+        "PROJECT_COMPLETED"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "description": "Agent or system component that emitted the event"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific data"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "format": "uuid" },
+        "taskId": { "type": "string", "format": "uuid" },
+        "agentId": { "type": "string" }
+      }
+    }
+  }
+}

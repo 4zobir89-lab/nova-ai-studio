@@ -1,0 +1,11 @@
+{
+  "id": "solution-architect",
+  "name": "Solution Architect Agent",
+  "version": "1.0.0",
+  "description": "Solution Architect specialist agent",
+  "capabilities": ["solution_architect"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

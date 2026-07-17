@@ -1,0 +1,11 @@
+{
+  "id": "ux",
+  "name": "Ux Agent",
+  "version": "1.0.0",
+  "description": "Ux specialist agent",
+  "capabilities": ["ux"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "code-reviewer",
+  "name": "Code Reviewer Agent",
+  "version": "1.0.0",
+  "description": "Code Reviewer specialist agent",
+  "capabilities": ["code_reviewer"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

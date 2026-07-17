@@ -1,0 +1,11 @@
+{
+  "id": "research",
+  "name": "Research Agent",
+  "version": "1.0.0",
+  "description": "Research specialist agent",
+  "capabilities": ["research"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}

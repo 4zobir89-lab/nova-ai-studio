@@ -1,0 +1,11 @@
+{
+  "id": "seo",
+  "name": "Seo Agent",
+  "version": "1.0.0",
+  "description": "Seo specialist agent",
+  "capabilities": ["seo"],
+  "inputs": [],
+  "outputs": [],
+  "dependencies": [],
+  "tools": []
+}
